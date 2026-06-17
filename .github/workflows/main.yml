@@ -1,36 +1,43 @@
-name: Deploy Advanced NGINX CDN & VPN Proxy
+name: Build and Push CDN Proxy VPN Image to GHCR
 
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - main  # Main branch ထဲ ကုဒ်တွန်းတင်တိုင်း Auto Run ပါမယ်
 
 jobs:
-  test_and_deploy:
+  build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write  # GHCR ပေါ်ကို Image လှမ်းရေးခွင့် ပေးခြင်း
 
     steps:
-    # ၁။ GitHub ထဲက ကုဒ်တွေကို ဆွဲယူခြင်း
+    # ၁။ GitHub Repository ထဲက ကုဒ်တွေကို ဆွဲယူခြင်း
     - name: Checkout Source Code
       uses: actions/checkout@v3
 
-    # ၂။ ရေးထားတဲ့ ဖိုင်တွေ စုံမစုံ အရင်စစ်ဆေးခြင်း
-    - name: Verify Configuration Files
-      run: |
-        echo "Validating project structure..."
-        test -f Dockerfile && echo "✓ Dockerfile exists."
-        test -f nginx-advanced.conf && echo "✓ Nginx config exists."
-        test -f index.html && echo "✓ Web Index page exists."
+    # ၂။ Docker Buildx စနစ်ကို အသက်သွင်းခြင်း
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-    # ၃။ Railway CLI ကို Ubuntu ပေါ်မှာ တရားဝင် နည်းလမ်းအတိုင်း တိုက်ရိုက် Install လုပ်ခြင်း
-    - name: Install Railway CLI
-      run: npm install -g @railway/cli
+    # ၃။ GitHub Container Registry (GHCR) သို့ အလိုအလျောက် Login ဝင်ခြင်း
+    # (မည်သည့် Token မှ ထည့်ပေးရန်မလိုပါ၊ GitHub ရဲ့ internal GITHUB_TOKEN ကို သုံးပါသည်)
+    - name: Log in to GHCR
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-    # ၄။ Railway ပေါ်သို့ အမှားအယွင်းမရှိ တိုက်ရိုက် ကုဒ်တွန်းတင် (Deploy) ခြင်း
-    - name: Deploy to Production
-      run: railway up --detach
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    # ၄။ Docker Image ကို Build လုပ်ပြီး GHCR ပေါ်သို့ ဗားရှင်း ၂ မျိုးဖြင့် တိုက်ရိုက် Push လုပ်ခြင်း
+    # (v1.0.2 နှင့် နောက်ဆုံးပေါ် latest tag နှစ်ခုလုံး ထွက်လာပါလိမ့်မည်)
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/cdn-proxy-vless:v1.0.2
+          ghcr.io/${{ github.repository_owner }}/cdn-proxy-vless:latest

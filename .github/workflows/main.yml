@@ -1,0 +1,47 @@
+name: Deploy Advanced NGINX CDN & VPN Proxy
+
+on:
+  push:
+    branches:
+      - main  # အစ်ကိုကြီးရဲ့ Main Branch ထဲ ကုဒ်တွန်းတင်ရင် အလုပ်လုပ်ပါမယ်
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # ၁။ GitHub Repository ထဲက ကုဒ်တွေကို ဆွဲယူခြင်း
+    - name: Checkout Source Code
+      uses: actions/checkout@v3
+
+    # ၂။ Docker Build Setup ပြင်ဆင်ခြင်း
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # ၃။ အစ်ကိုကြီးရဲ့ ပြင်ဆင်ထားသော Docker Base အား စစ်ဆေးခြင်း
+    - name: Verify Configuration Files
+      run: |
+        echo "Validating project structure..."
+        test -f Dockerfile && echo "✓ Dockerfile exists."
+        test -f nginx-advanced.conf && echo "✓ Nginx config exists."
+        test -f index.html && echo "✓ Web Index page exists."
+
+    # ၄။ Docker Compose သုံးပြီး ဆာဗာအဖြစ် စမ်းသပ် Build ကြည့်ခြင်း (Lint/Dry-Run)
+    - name: Test Docker Build
+      run: |
+        docker compose config
+
+    # ၅။ Railway သို့မဟုတ် အစ်ကိုကြီးရဲ့ Server ပေါ်သို့ တိုက်ရိုက် Deployment လုပ်ခြင်း
+    # (ဒီနေရာတွင် Railway CLI သုံးပြီး Auto-Deploy လုပ်အောင် စီစဉ်ပေးထားပါတယ်)
+    - name: Install Railway CLI
+      run: npm install -g @railway/cli
+
+    - name: Deploy to Production
+      run: railway up --detach
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        TUNNEL_TOKEN: ${{ secrets.TUNNEL_TOKEN }}
+        

@@ -13,9 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # ၁။ GitHub ထဲက ကုဒ်တွေကို ဆွဲယူခြင်း
     - name: Checkout Source Code
       uses: actions/checkout@v3
 
+    # ၂။ ရေးထားတဲ့ ဖိုင်တွေ စုံမစုံ အရင်စစ်ဆေးခြင်း
     - name: Verify Configuration Files
       run: |
         echo "Validating project structure..."
@@ -23,8 +25,12 @@ jobs:
         test -f nginx-advanced.conf && echo "✓ Nginx config exists."
         test -f index.html && echo "✓ Web Index page exists."
 
-    - name: Deploy to Railway
-      uses: bervProject/railway-deploy-action@v1
-      with:
-        railway_token: ${{ secrets.RAILWAY_TOKEN }}
-        
+    # ၃။ Railway CLI ကို Ubuntu ပေါ်မှာ တရားဝင် နည်းလမ်းအတိုင်း တိုက်ရိုက် Install လုပ်ခြင်း
+    - name: Install Railway CLI
+      run: npm install -g @railway/cli
+
+    # ၄။ Railway ပေါ်သို့ အမှားအယွင်းမရှိ တိုက်ရိုက် ကုဒ်တွန်းတင် (Deploy) ခြင်း
+    - name: Deploy to Production
+      run: railway up --detach
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

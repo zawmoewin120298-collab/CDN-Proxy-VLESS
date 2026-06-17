@@ -1,0 +1,30 @@
+name: Deploy Advanced NGINX CDN & VPN Proxy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v3
+
+    - name: Verify Configuration Files
+      run: |
+        echo "Validating project structure..."
+        test -f Dockerfile && echo "✓ Dockerfile exists."
+        test -f nginx-advanced.conf && echo "✓ Nginx config exists."
+        test -f index.html && echo "✓ Web Index page exists."
+
+    - name: Deploy to Railway
+      uses: bervProject/railway-deploy-action@v1
+      with:
+        railway_token: ${{ secrets.RAILWAY_TOKEN }}
+        

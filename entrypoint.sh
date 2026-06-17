@@ -13,6 +13,7 @@ else
     echo "⚠️ Warning: TUNNEL_TOKEN Variable is empty! Tunnel cannot start."
 fi
 
-# ၃။ Container တစ်ခုလုံးကို အောက်ခြေကနေ လုံးဝအကျမခံဘဲ အမြဲတမ်း အသက်ရှင်နေအောင် ထိန်းထားပါ
-echo "All Core components are running successfully. Keeping server alive..."
-tail -f /dev/null
+# ၃။ Nginx ကို ရှေ့ဆုံး (Foreground) ကနေ စတင်မောင်းနှင်ပြီး Container ကြီးကို အမြဲတမ်း အသက်ရှင်စေခြင်း
+# (Nginx ပွင့်လာမှသာ ပရောဂျက်တစ်ခုလုံး လမ်းကြောင်း ပွင့်သွားမှာ ဖြစ်ပါတယ်)
+echo "Starting Nginx Web/Proxy Server..."
+nginx -g "daemon off;"

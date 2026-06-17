@@ -6,10 +6,15 @@
   },
   "inbounds": [
     {
-      "port": 10086, "listen": "127.0.0.1", "protocol": "vless", "settings": {
+      "port": 10086,
+      "listen": "127.0.0.1",
+      "protocol": "vless",
+      "settings": {
         "clients": [
           {
-            "id": "e3b6a9f4-18c2-4877-b952-b13da82c3f4a", "level": 0, "email": "admin@zawmoewin.mmth"
+            "id": "8248b4c6-ea75-446a-866b-11609e4d6aed",
+            "level": 0,
+            "email": "admin@zawmoewin.mmth"
           }
         ],
         "decryption": "none"
@@ -17,7 +22,7 @@
       "streamSettings": {
         "network": "ws",
         "wsSettings": {
-          "path": "/vless-cdn" 
+          "path": "/vless-cdn"
         }
       }
     }
@@ -26,12 +31,6 @@
     {
       "protocol": "freedom",
       "settings": {}
-    },
-    {
-      "protocol": "blackhole",
-      "settings": {},
-      "tag": "blocked"
     }
   ]
 }
-

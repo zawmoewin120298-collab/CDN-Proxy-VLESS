@@ -26,11 +26,15 @@ RUN mkdir -p /var/cache/nginx/cdn \
 
 # ၃။ Nginx Advanced configuration နှင့် V2ray configurations များ ထည့်သွင်းခြင်း
 COPY nginx-advanced.conf /etc/nginx/nginx.conf
-# အစ်ကို့ရဲ့ config.json ကို v2ray folder ထဲ ထည့်ရန်
-COPY config.json /etc/v2ray/config.json 
+
+# 💡 ပြင်ဆင်ချက် (၁) - အစ်ကိုကြီးဆီမှာ config.json မရှိသေးဘဲ nginx-advanced.conf သုံးထားလို့ 
+# လောလောဆယ် Error မတက်အောင် နေရာလွတ် config.json တစ်ခု တန်းဆောက်ပေးလိုက်ပါတယ်ဗျာ။
+RUN echo '{}' > /etc/v2ray/config.json
 
 # ၄။ Static HTML ဖိုင်များနှင့် Error Pages များ ဆောက်ခြင်း
-COPY ./html /usr/share/nginx/html
+# 💡 ပြင်ဆင်ချက် (၂) - html ဖိုဒါမရှိဘဲ index.html က အပြင်မှာ တိုက်ရိုက်ရှိနေလို့ လမ်းကြောင်းမှန် ပြင်ထားပါတယ်ဗျာ။
+COPY index.html /usr/share/nginx/html/index.html
+
 RUN mkdir -p /usr/share/nginx/html/errors
 RUN echo '<!DOCTYPE html><html><head><title>400 Bad Request</title></head><body><h1>400 - Bad Request</h1><p>Your request was malformed.</p></body></html>' > /usr/share/nginx/html/errors/400.html \
     && echo '<!DOCTYPE html><html><head><title>404 Not Found</title></head><body><h1>404 - Not Found</h1><p>The requested resource was not found.</p></body></html>' > /usr/share/nginx/html/errors/404.html \

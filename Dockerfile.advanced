@@ -1,0 +1,21 @@
+FROM nginx:latest
+
+# ၁။ CDN Config ဖိုင်တွေကို Container ထဲ ကူးထည့်ခြင်း
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY upstream.conf /etc/nginx/upstream.conf
+
+# ၂။ Static ဖိုင်တွေပါရင် ကူးထည့်ဖို့ (မူရင်းအတိုင်း ထားပေးထားပါတယ်)
+COPY ./html /usr/share/nginx/html
+
+# ၃။ Cache ဒေတာတွေ သိမ်းဆည်းဖို့ ဖိုဒါ ဆောက်ပေးခြင်း (ဒါက CDN အတွက် မရှိမဖြစ်ပါ)
+RUN mkdir -p /var/nginx/cache && chmod -R 777 /var/nginx/cache
+
+# Port 80 ကို ဖွင့်ပေးခြင်း
+EXPOSE 80
+
+# Health check စနစ်ကို မူရင်းအတိုင်း ထိန်းထားပေးခြင်း
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+
+# Nginx ကို စတင်မောင်းနှင်ခြင်း
+CMD [ "nginx", "-g", "daemon off;" ]

@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # 🚀 Advanced CDN Proxy + Xray VPN + Cloudflare Tunnel Server
+  cdn-proxy-advanced:
+    build:
+      context: .
+      dockerfile: Dockerfile  # ရှေ့က ညှိထားတဲ့အတိုင်း Dockerfile လို့ပဲ သတ်မှတ်ပေးထားပါတယ်
+    ports:
+      - "8081:80"  # အပြင်ကနေ Port 8081 နဲ့ ဆက်သွယ်နိုင်ရန်
+    container_name: cdn-proxy-advanced
+    restart: unless-stopped
+    volumes:
+      - nginx_cache:/var/cache/nginx
+      - nginx_logs_advanced:/var/log/nginx
+    environment:
+      - TZ=Asia/Bangkok  # Timezone ကို ဒေသစံတော်ချိန်အတိုင်း ထားပေးထားပါတယ်
+      # 🎯 အရေးကြီးဆုံးအပိုင်း - Cloudflare Tunnel Token အား Local စက်မှ တိုက်ရိုက်ဆွဲယူရန်
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # 📊 Log Viewer Service (ကွန်တိန်နာတွေရဲ့ အလုပ်လုပ်ပုံ Logs တွေကို Port 8088 ကနေ အလွယ်တကူ ကြည့်ရန်)
+  log-viewer:
+    image: amir20/dozzle:latest
+    container_name: cdn-proxy-logs
+    ports:
+      - "8088:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+
+volumes:
+  nginx_cache:
+    driver: local
+  nginx_logs_advanced:
+    driver: local

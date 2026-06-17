@@ -27,12 +27,10 @@ RUN mkdir -p /var/cache/nginx/cdn \
 # ၃။ Nginx Advanced configuration နှင့် V2ray configurations များ ထည့်သွင်းခြင်း
 COPY nginx-advanced.conf /etc/nginx/nginx.conf
 
-# 💡 ပြင်ဆင်ချက် (၁) - အစ်ကိုကြီးဆီမှာ config.json မရှိသေးဘဲ nginx-advanced.conf သုံးထားလို့ 
-# လောလောဆယ် Error မတက်အောင် နေရာလွတ် config.json တစ်ခု တန်းဆောက်ပေးလိုက်ပါတယ်ဗျာ။
-RUN echo '{}' > /etc/v2ray/config.json
+# 💡 ပြင်ဆင်ချက် - အစ်ကိုကြီးဆောက်ထားတဲ့ config.json အစစ်ကို Docker Container ထဲသို့ ကူးထည့်ခြင်း
+COPY config.json /etc/v2ray/config.json 
 
 # ၄။ Static HTML ဖိုင်များနှင့် Error Pages များ ဆောက်ခြင်း
-# 💡 ပြင်ဆင်ချက် (၂) - html ဖိုဒါမရှိဘဲ index.html က အပြင်မှာ တိုက်ရိုက်ရှိနေလို့ လမ်းကြောင်းမှန် ပြင်ထားပါတယ်ဗျာ။
 COPY index.html /usr/share/nginx/html/index.html
 
 RUN mkdir -p /usr/share/nginx/html/errors

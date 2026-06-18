@@ -20,7 +20,7 @@
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "ws",
+        "network": "tcp",
         "wsSettings": {
           "path": "/vless-cdn"
         }

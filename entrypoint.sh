@@ -14,6 +14,5 @@ else
 fi
 
 # ၃။ Nginx ကို ရှေ့ဆုံး (Foreground) ကနေ စတင်မောင်းနှင်ပြီး Container ကြီးကို အမြဲတမ်း အသက်ရှင်စေခြင်း
-# (Nginx ပွင့်လာမှသာ ပရောဂျက်တစ်ခုလုံး လမ်းကြောင်း ပွင့်သွားမှာ ဖြစ်ပါတယ်)
 echo "Starting Nginx Web/Proxy Server..."
 nginx -g "daemon off;"

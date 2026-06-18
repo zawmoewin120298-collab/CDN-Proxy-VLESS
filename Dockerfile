@@ -1,4 +1,4 @@
-FROM sagernet/sing-box:latest
+FROM ghcr.io/sagernet/sing-box:latest
 
 # လိုအပ်သော Tools များနှင့် cloudflared ကို သွင်းခြင်း
 RUN apk add --no-cache curl bash jq ca-certificates && \

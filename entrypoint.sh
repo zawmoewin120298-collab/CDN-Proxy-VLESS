@@ -1,17 +1,14 @@
 #!/bin/bash
 
-# ၁။ Xray (V2ray) Core ကို Background တွင် စတင်မောင်းနှင်ပါ
-echo "Starting Xray Core Engine..."
-/usr/bin/v2ray run -config /etc/v2ray/config.json &
+# ၁။ Sing-Box Core Engine ကို နောက်ခံ (Background) တွင် စတင်မောင်းနှင်ပါ
+echo "Starting Sing-Box Engine on Port 8080..."
+/usr/local/bin/sing-box run -c /etc/sing-box/config.yaml &
 
-# ၂။ Cloudflare Tunnel အား Token ဖြင့် ချိတ်ဆက်ခြင်း
+# ၂။ Cloudflare Tunnel ကို Token ဖြင့် တိုက်ရိုက်ချိတ်ဆက်ပါ
 if [ ! -z "$TUNNEL_TOKEN" ]; then
     echo "Connecting to Cloudflare Tunnel Network..."
-    /usr/local/bin/cloudflared tunnel --no-autoupdate run --protocol http2 --no-tls-verify --token "$TUNNEL_TOKEN" &
+    exec /usr/local/bin/cloudflared tunnel --no-autoupdate run --protocol http2 --no-tls-verify --token "$TUNNEL_TOKEN"
 else
-    echo "⚠️ Warning: TUNNEL_TOKEN Variable is empty!"
+    echo "⚠️ ERROR: TUNNEL_TOKEN is missing! Process stopped."
+    exit 1
 fi
-
-# ၃။ Nginx အား ရှေ့ဆုံးမှ မောင်းနှင်ပြီး Container အား အမြဲရှင်သန်စေခြင်း
-echo "Starting Nginx Web Server on Port 7860..."
-exec nginx -g "daemon off;"

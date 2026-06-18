@@ -19,15 +19,16 @@ RUN mkdir -p /etc/v2ray /usr/bin && \
 RUN curl -L -o /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 && \
     chmod +x /usr/local/bin/cloudflared
 
-# ၂။ Cache directories ဆောက်ခြင်း
+# ၂။ Cache နှင့် Log directories များဆောက်ပြီး Permission ပေးခြင်း
 RUN mkdir -p /var/cache/nginx/cdn \
     && mkdir -p /var/cache/nginx/static \
-    && chown -R nginx:nginx /var/cache/nginx
+    && mkdir -p /var/log/nginx \
+    && chown -R nginx:nginx /var/cache/nginx /var/log/nginx
 
 # ၃။ Nginx Advanced configuration နှင့် V2ray configurations များ ထည့်သွင်းခြင်း
 COPY nginx-advanced.conf /etc/nginx/nginx.conf
 
-# 💡 ပြင်ဆင်ချက် - အစ်ကိုကြီးဆောက်ထားတဲ့ config.json အစစ်ကို Docker Container ထဲသို့ ကူးထည့်ခြင်း
+# Config.json အစစ်ကို Docker Container ထဲသို့ ကူးထည့်ခြင်း
 COPY config.json /etc/v2ray/config.json 
 
 # ၄။ Static HTML ဖိုင်များနှင့် Error Pages များ ဆောက်ခြင်း
@@ -44,8 +45,8 @@ RUN chown -R nginx:nginx /usr/share/nginx/html
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Port 80 ကို HTTP အတွက် ဖွင့်ခြင်း
-EXPOSE 80
+# Cloud Platform များအတွက် Port 7860 ကို လမ်းဖွင့်ပေးခြင်း
+EXPOSE 7860
 
 # Start မောင်းနှင်ရန် script ကို ခေါ်ခြင်း
 CMD ["/bin/bash", "/entrypoint.sh"]

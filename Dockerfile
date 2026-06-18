@@ -9,7 +9,7 @@ RUN apk add --no-cache curl bash jq ca-certificates && \
 RUN mkdir -p /etc/sing-box
 
 # Config နှင့် Script ကို Copy ကူးထည့်ခြင်း
-COPY config.yaml /etc/sing-box/config.yaml
+COPY config.json /etc/sing-box/config.json
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

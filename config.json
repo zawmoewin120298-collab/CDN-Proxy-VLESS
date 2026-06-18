@@ -1,33 +1,28 @@
 {
   "log": {
-    "loglevel": "warning"
+    "level": "info"
   },
   "inbounds": [
     {
-      "port": 10086,
-      "listen": "127.0.0.1",
-      "protocol": "vless",
-      "settings": {
-        "clients": [
-          {
-            "id": "9fb01a22-33f1-4e9e-b5a5-e18fde50707a",
-            "level": 0
-          }
-        ],
-        "decryption": "none"
-      },
-      "streamSettings": {
-        "network": "ws",
-        "wsSettings": {
-          "path": "/vless-cdn"
+      "type": "vless",
+      "tag": "vless-in",
+      "listen": "0.0.0.0",
+      "listen_port": 8080,
+      "users": [
+        {
+          "uuid": "f2e17b4d-22fd-44a4-90db-40649717be8e"
         }
+      ],
+      "transport": {
+        "type": "ws",
+        "path": "/vless-cdn"
       }
     }
   ],
   "outbounds": [
     {
-      "protocol": "freedom",
-      "settings": {}
+      "type": "freedom",
+      "tag": "direct"
     }
   ]
 }

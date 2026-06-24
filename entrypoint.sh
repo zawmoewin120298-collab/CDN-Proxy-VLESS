@@ -12,7 +12,8 @@ fi
 # ၂။ Cloudflare Tunnel ကို Token ဖြင့် နောက်ခံ (Background) မှာ ချိတ်ဆက်ပါ
 if [ ! -z "$TUNNEL_TOKEN" ]; then
     echo "✅ Connecting to Cloudflare Tunnel Network in background..."
-    /usr/local/bin/cloudflared tunnel --no-autoupdate run --protocol http2 --no-tls-verify --token "$TUNNEL_TOKEN" &
+    # Protocol နေရာကို အလိုအလျောက် ရွေးခိုင်းပြီး ပြဿနာကင်းအောင် ပြင်ထားပါသည်
+    /usr/local/bin/cloudflared tunnel --no-autoupdate run --token "$TUNNEL_TOKEN" &
 else
     echo "⚠️ WARNING: TUNNEL_TOKEN is missing. Skipping Cloudflare Tunnel."
 fi

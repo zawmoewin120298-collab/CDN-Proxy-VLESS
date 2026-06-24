@@ -7,7 +7,7 @@
       "type": "vless",
       "tag": "vless-in",
       "listen": "0.0.0.0",
-      "listen_port": 443,
+      "listen_port": 8080,
       "users": [
         {
           "uuid": "f2e17b4d-22fd-44a4-90db-40649717be8e"
@@ -15,13 +15,7 @@
       ],
       "transport": {
         "type": "ws",
-        "path": "/"
-      },
-      "tls": {
-        "enabled": true,
-        "server_name": "cdn-proxy-vless-production-5eb3.up.railway.app",
-        "certificate_path": "/path/to/cert.pem",
-        "key_path": "/path/to/key.pem"
+        "path": "/vless-cdn"
       }
     }
   ],

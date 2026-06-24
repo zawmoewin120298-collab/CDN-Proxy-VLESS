@@ -1,22 +1,15 @@
 #!/bin/bash
 
-# ၁။ Node.js Web Server ကို နောက်ကွယ် (Background) ကနေ စတင်ပါ
-if [ -d "/app" ]; then
-    echo "✅ Starting Node.js Web Server on Port ${PORT:-3000}..."
-    cd /app && npm start &
-else
-    echo "⚠️ WARNING: /app directory not found, skipping Node.js startup."
-fi
-
-# ၂။ Sing-Box Engine ကို JSON Config ဖြင့် Background တွင် စတင်ပါ
+# ၁။ Sing-Box Engine ကို JSON Config ဖြင့် Background တွင် စတင်ပါ
 if [ -f "/etc/sing-box/config.json" ]; then
     echo "✅ Starting Sing-Box Engine on Port 8080..."
     sing-box run -c /etc/sing-box/config.json &
 else
-    echo "⚠️ WARNING: /etc/sing-box/config.json not found, skipping Sing-Box."
+    echo "⚠️ ERROR: /etc/sing-box/config.json not found!"
+    exit 1
 fi
 
-# ၃။ Cloudflare Tunnel ကို Token ဖြင့် နောက်ခံ (Background) မှာ ချိတ်ဆက်ပါ
+# ၂။ Cloudflare Tunnel ကို Token ဖြင့် နောက်ခံ (Background) မှာ ချိတ်ဆက်ပါ
 if [ ! -z "$TUNNEL_TOKEN" ]; then
     echo "✅ Connecting to Cloudflare Tunnel Network in background..."
     /usr/local/bin/cloudflared tunnel --no-autoupdate run --protocol http2 --no-tls-verify --token "$TUNNEL_TOKEN" &
@@ -24,6 +17,6 @@ else
     echo "⚠️ WARNING: TUNNEL_TOKEN is missing. Skipping Cloudflare Tunnel."
 fi
 
-# ၄။ Container ကို ဆက်လက်အလုပ်လုပ်စေရန် အဓိက Process ကို စောင့်ထားပါ
+# ၃။ Container ကို ဆက်လက်အလုပ်လုပ်စေရန် အဓိက Process ကို စောင့်ထားပါ
 echo "✅ All services started. Keeping container alive..."
 wait

@@ -22,10 +22,6 @@ COPY config.json /etc/sing-box/config.json
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# x-ui binary ကို ကူးထည့်ပါ (ဆရာ့ binary ရှိတဲ့နေရာအတိုင်း)
-COPY x-ui /app/x-ui
-RUN chmod +x /app/x-ui
-
 # ၆။ WispByte အတွက် ပင်မ Port လမ်းကြောင်း ဖွင့်ပေးခြင်း
 EXPOSE 3000
 EXPOSE 8080

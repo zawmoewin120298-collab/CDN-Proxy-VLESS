@@ -1,12 +1,12 @@
 {
-  "name": "wispbyte-3xui-vless",
+  "name": "singbox-railway",
   "version": "1.0.0",
-  "description": "Run 3X-UI and VLESS on WispByte Node.js Environment",
+  "description": "Sing-Box with Node.js Web Server",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.18.2"
   }
 }

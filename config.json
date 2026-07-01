@@ -23,7 +23,7 @@
       "tag": "http-web-in",
       "listen": "::",
       "listen_port": 8080,
-      "static_dir": "/var/www/html"
+      "redirect": "https://www.google.com"
     }
   ],
   "outbounds": [

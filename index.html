@@ -1,236 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced CDN Proxy & VPN Server</title>
+    <title>Service Status</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .endpoint {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        
-        /* 💡 VPN အပိုင်းအတွက် သီးသန့်အရောင် ခွဲထားပေးပါသည် */
-        .endpoint.vpn {
-            border-left: 4px solid #9c27b0;
-        }
-
-        .endpoint h3 {
-            margin-top: 0;
-            color: #007bff;
-        }
-        
-        .endpoint.vpn h3 {
-            color: #9c27b0;
-        }
-
-        .endpoint code {
-            background: #e9ecef;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            word-break: break-all;
-        }
-
-        .test-button {
-            background: #28a745;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .test-button:hover {
-            background: #218838;
-        }
-        
-        .test-button.vpn-btn {
-            background: #e91e63;
-        }
-        
-        .test-button.vpn-btn:hover {
-            background: #c2185b;
-        }
-
-        .status {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-family: monospace;
-        }
-
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .status.info {
-            background: #e2f0d9;
-            color: #385723;
-            border: 1px solid #c5e0b4;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 16px; text-align: center; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); max-width: 400px; width: 90%; animation: fadeIn 1s ease-in-out; }
+        .icon { font-size: 3.5rem; color: #10b981; margin-bottom: 1rem; animation: pulse 2s infinite; }
+        h1 { font-size: 1.8rem; margin-bottom: 0.5rem; font-weight: 600; }
+        p { color: #94a3b8; font-size: 0.95rem; line-height: 1.5; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>🚀 Advanced CDN Proxy & VPN Gate</h1>
-
-        <p>Welcome to your production-ready hybrid server! This NGINX core acts as an advanced CDN Proxy for enterprise resources, managing CORS while simultaneously routing high-speed tunnel traffic to the back-end Xray VPN service.</p>
-
-        <h2>Available Endpoints</h2>
-
-        <div class="endpoint vpn">
-            <h3>⚡ Xray VPN (VLESS Tunnel)</h3>
-            <p><strong>Path Gateway:</strong> <code>/www.speedtest.net</code></p>
-            <p><strong>Backend Port:</strong> <code>127.0.0.1:8080 (Xray Core)</code></p>
-            <p><strong>Allowed SNI Host:</strong> <code>cfopenspeedtestnet.fastlyspeedtestnet.ggff.net</code></p>
-            <p><strong>Features:</strong> No Rate-Limit, WebSocket Handshake 101, Keep-Alive 3600s</p>
-            <button class="test-button vpn-btn" onclick="testXrayTunnel()">Test VPN WebSocket Gate</button>
-        </div>
-
-        <div class="endpoint">
-            <h3>📂 Optimizely CDN Proxy</h3>
-            <p><strong>Endpoint:</strong> <code>/datafiles/</code></p>
-            <p><strong>Proxies to:</strong> <code>https://cdn.optimizely.com/datafiles/</code></p>
-            <p><strong>Features:</strong> Smart Caching, CORS-enabled, GET/OPTIONS, Rate Limited</p>
-            <button class="test-button" onclick="testEndpoint('/datafiles/')">Test CDN Endpoint</button>
-        </div>
-
-        <div class="endpoint">
-            <h3>🌐 Google Proxy</h3>
-            <p><strong>Endpoint:</strong> <code>/redirect-to-google</code></p>
-            <p><strong>Proxies to:</strong> <code>https://www.google.com</code></p>
-            <p><strong>Purpose:</strong> External proxying with header sanitization</p>
-            <a href="/redirect-to-google" class="test-button" target="_blank">Test Google Proxy</a>
-        </div>
-
-        <h2>How to Use VPN Gateway</h2>
-        <ol>
-            <li>Configure your VLESS client (NetMod / v2rayNG) with the parameters below:</li>
-            <li><strong>Address:</strong> <code>cfopenspeedtestnet.fastlyspeedtestnet.ggff.net</code></li>
-            <li><strong>Port:</strong> <code>80</code> (or 443 via Cloudflare CDN)</li>
-            <li><strong>Path:</strong> <code>/www.speedtest.net</code></li>
-            <li><strong>Network:</strong> <code>ws</code> (WebSocket)</li>
-        </ol>
-
-        <h2>System Operations</h2>
-        <button class="test-button" onclick="checkStatus()">Check Nginx Core Status</button>
-        <div id="status-result"></div>
-
-        <footer style="margin-top: 40px; text-align: center; color: #666; border-top: 1px solid #eee; padding-top: 20px;">
-            <p>CDN & VPN Core Engine powered by NGINX | Admin Dashboard</p>
-        </footer>
+    <div class="card">
+        <div class="icon">✓</div>
+        <h1>Congratulations!</h1>
+        <p>Your Sing-Box proxy backend deployment is successfully running and fully secured.</p>
     </div>
-
-    <script>
-        // 🎯 Xray Tunnel အလုပ်လုပ်ပုံကို စမ်းသပ်မည့် Logic
-        function testXrayTunnel() {
-            const statusDiv = document.getElementById('status-result');
-            statusDiv.innerHTML = '<div class="status">Initiating WebSocket Handshake Request...</div>';
-
-            // Fake WebSocket Headers အား fetch ဖြင့် ပို့လွှတ်ပြီး စမ်းသပ်ခြင်း
-            fetch('/www.speedtest.net', {
-                method: 'GET',
-                headers: {
-                    'Upgrade': 'websocket',
-                    'Connection': 'Upgrade'
-                }
-            })
-            .then(response => {
-                // Xray Core ဆီ လမ်းကြောင်းပေါက်ပါက (Auth မပါ၍ 400 ပြသော်လည်း) Gate ပွင့်နေကြောင်း သိနိုင်ပါသည်
-                if (response.status === 101 || response.status === 400 || response.status === 404) {
-                    statusDiv.innerHTML = `<div class="status success">✅ Xray WebSocket Gate is ACTIVE! Nginx forwarded request to Port 8080 successfully. (HTTP ${response.status})</div>`;
-                } else {
-                    statusDiv.innerHTML = `<div class="status error">⚠️ Unexpected response from gateway. Status: ${response.status}</div>`;
-                }
-            })
-            .catch(error => {
-                // Browser သည် Protocol Switching 101 အား Error အဖြစ် သတ်မှတ်တတ်သဖြင့် ထပ်မံစစ်ဆေးခြင်း
-                statusDiv.innerHTML = `<div class="status info">📡 Handshake transmitted. Gateway connection active. Ensure client configurations match.</div>`;
-            });
-        }
-
-        function testEndpoint(endpoint) {
-            const statusDiv = document.getElementById('status-result');
-            statusDiv.innerHTML = '<div class="status">Testing endpoint...</div>';
-
-            fetch(endpoint, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    statusDiv.innerHTML = `<div class="status success">✅ Endpoint ${endpoint} is working! Status: ${response.status}</div>`;
-                } else {
-                    statusDiv.innerHTML = `<div class="status error">⚠️ Endpoint returned status: ${response.status}</div>`;
-                }
-            })
-            .catch(error => {
-                statusDiv.innerHTML = `<div class="status error">❌ Error testing endpoint: ${error.message}</div>`;
-            });
-        }
-
-        function checkStatus() {
-            const statusDiv = document.getElementById('status-result');
-            statusDiv.innerHTML = '<div class="status">Checking server status...</div>';
-
-            fetch('/', {
-                method: 'HEAD'
-            })
-            .then(response => {
-                if (response.ok) {
-                    statusDiv.innerHTML = '<div class="status success">✅ Nginx Edge Proxy is running perfectly!</div>';
-                } else {
-                    statusDiv.innerHTML = '<div class="status error">⚠️ Server returned an error</div>';
-                }
-            })
-            .catch(error => {
-                statusDiv.innerHTML = '<div class="status error">❌ Server connection failed</div>';
-            });
-        }
-    </script>
 </body>
-
 </html>
+

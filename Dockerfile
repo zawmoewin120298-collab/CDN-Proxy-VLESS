@@ -4,11 +4,12 @@ FROM ghcr.io/sagernet/sing-box:latest
 # လိုအပ်သော Linux Tools များ သွင်းခြင်း
 RUN apk add --no-cache curl bash jq ca-certificates
 
-# Sing-Box Config နေရာ Folder ဆောက်ခြင်း
-RUN mkdir -p /etc/sing-box
+# Sing-Box Config နှင့် Web HTML နေရာ Folder ဆောက်ခြင်း
+RUN mkdir -p /etc/sing-box /var/www/html
 
-# Config နှင့် Entrypoint Script ကို ကူးထည့်ခြင်း
+# Config, HTML နှင့် Entrypoint Script ကို ကူးထည့်ခြင်း
 COPY config.json /etc/sing-box/config.json
+COPY index.html /var/www/html/index.html
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

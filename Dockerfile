@@ -1,8 +1,10 @@
 # အဆင့်မြင့် Sing-Box ပုံရိပ်ကို အခြေခံပြီး စတင်ခြင်း
 FROM ghcr.io/sagernet/sing-box:latest
 
-# လိုအပ်သော Linux Tools များ သွင်းခြင်း
-RUN apk add --no-cache curl bash jq ca-certificates
+# လိုအပ်သော Linux Tools များ နှင့် Cloudflare Tunnel (cloudflared) ကို ထည့်သွင်းခြင်း
+RUN apk add --no-cache curl bash jq ca-certificates libc6-compat \
+    && curl -L --output /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 \
+    && chmod +x /usr/local/bin/cloudflared
 
 # Sing-Box Config နှင့် Web HTML နေရာ Folder ဆောက်ခြင်း
 RUN mkdir -p /etc/sing-box /var/www/html

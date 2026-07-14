@@ -3,24 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Status</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 16px; text-align: center; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); max-width: 400px; width: 90%; animation: fadeIn 1s ease-in-out; }
-        .icon { font-size: 3.5rem; color: #10b981; margin-bottom: 1rem; animation: pulse 2s infinite; }
-        h1 { font-size: 1.8rem; margin-bottom: 0.5rem; font-weight: 600; }
-        p { color: #94a3b8; font-size: 0.95rem; line-height: 1.5; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-    </style>
+    <title>MM-VPN Gateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="card">
-        <div class="icon">✓</div>
-        <h1>Congratulations!</h1>
-        <p>Your Sing-Box proxy backend deployment is successfully running and fully secured.</p>
+<body class="bg-gray-950 text-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-2xl w-full max-w-md">
+        <div class="flex items-center space-x-3 mb-6">
+            <div class="w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
+            <h1 class="text-xl font-bold tracking-wide">MM-VPN Server Active</h1>
+        </div>
+        
+        <div class="space-y-4 mb-6">
+            <div class="bg-gray-950 p-3 rounded-lg border border-gray-800/50">
+                <p class="text-xs text-gray-500 uppercase">UUID</p>
+                <p class="font-mono text-sm break-all text-green-400">UUID_PLACEHOLDER</p>
+            </div>
+            <div class="bg-gray-950 p-3 rounded-lg border border-gray-800/50">
+                <p class="text-xs text-gray-500 uppercase">WebSocket Path</p>
+                <p class="font-mono text-sm text-blue-400">PATH_PLACEHOLDER</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-xs text-gray-500 uppercase mb-2">VLESS Config Link</label>
+            <textarea id="configLink" readonly class="w-full bg-gray-950 border border-gray-800 rounded-lg p-3 text-xs font-mono resize-none h-24 focus:outline-none focus:border-green-500 text-gray-300">VLESS_LINK_PLACEHOLDER</textarea>
+        </div>
+
+        <button onclick="copyConfig()" class="w-full py-3 bg-green-600 hover:bg-green-500 active:bg-green-700 transition duration-200 rounded-xl font-medium shadow-lg shadow-green-900/20">
+            Copy Configuration
+        </button>
     </div>
+
+    <script>
+        function copyConfig() {
+            const copyText = document.getElementById("configLink");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            alert("VLESS Link Copied successfully! 🎉");
+        }
+    </script>
 </body>
 </html>
-

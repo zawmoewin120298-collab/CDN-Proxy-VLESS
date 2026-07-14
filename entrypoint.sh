@@ -2,9 +2,9 @@
 
 # Default သတ်မှတ်ချက်များ (Environment variables မထည့်ထားရင် သုံးမယ့်အရာများ)
 PORT=${PORT:-8080}
-UUID=${UUID:-"e3b1c678-8ba9-4f2e-bf73-4560df76848d"}
+UUID=${UUID:-"f55ce6cc-3f6b-40fc-9e3b-abe26db17009"}
 PATH_WS=${PATH_WS:-"/vless-ws"}
-DOMAIN=${RAILWAY_STATIC_URL:-"your-railway-domain.up.railway.app"}
+DOMAIN=${RAILWAY_STATIC_URL:-"cdn-proxy-vless-production-6a77.up.railway.app"}
 
 # Domain name အား သန့်စင်ခြင်း (https:// ကို ဖယ်ထုတ်ရန်)
 DOMAIN=$(echo "$DOMAIN" | sed -e 's|^[^/]*//||' -e 's|/.*$||')

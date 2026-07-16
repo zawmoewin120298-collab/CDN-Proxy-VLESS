@@ -6,33 +6,18 @@
   "inbounds": [
     {
       "type": "vless",
-      "tag": "vless-ais",
+      "tag": "vless-in",
       "listen": "127.0.0.1",
       "listen_port": 10000,
       "users": [
-        { "uuid": "f55ce6cc-3f6b-40fc-9e3b-abe26db17009" }
+        {
+          "uuid": "f55ce6cc-3f6b-40fc-9e3b-abe26db17009"
+        }
       ],
-      "transport": { "type": "ws", "path": "/ais" }
-    },
-    {
-      "type": "vless",
-      "tag": "vless-true",
-      "listen": "127.0.0.1",
-      "listen_port": 10001,
-      "users": [
-        { "uuid": "f55ce6cc-3f6b-40fc-9e3b-abe26db17009" }
-      ],
-      "transport": { "type": "ws", "path": "/true" }
-    },
-    {
-      "type": "vless",
-      "tag": "vless-dtac",
-      "listen": "127.0.0.1",
-      "listen_port": 10002,
-      "users": [
-        { "uuid": "f55ce6cc-3f6b-40fc-9e3b-abe26db17009" }
-      ],
-      "transport": { "type": "ws", "path": "/dtac" }
+      "transport": {
+        "type": "ws",
+        "path": "/ais"
+      }
     }
   ],
   "outbounds": [
@@ -42,4 +27,3 @@
     }
   ]
 }
-

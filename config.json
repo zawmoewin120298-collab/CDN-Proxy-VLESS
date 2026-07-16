@@ -5,22 +5,29 @@
   },
   "inbounds": [
     {
-      "type": "vless",
-      "tag": "vless-in",
-      "listen": "127.0.0.1",
-      "listen_port": 10000,
-      "users": [
-        {
-          "uuid": "f55ce6cc-3f6b-40fc-9e3b-abe26db17009"
-        }
-      ],
-      "transport": {
-        "type": "ws",
-        "path": "/ais"
-      }
+      "type": "tun",
+      "tag": "tun-in",
+      "inet4_address": "172.19.0.1/30",
+      "auto_route": true,
+      "strict_route": true
     }
   ],
   "outbounds": [
+    {
+      "type": "vless",
+      "tag": "proxy",
+      "server": "cdn-up-and-runninggit-production.up.railway.app",
+      "server_port": 443,
+      "uuid": "f55ce6cc-3f6b-40fc-9e3b-abe26db17009",
+      "transport": {
+        "type": "ws",
+        "path": "/ais"
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "cdn-up-and-runninggit-production.up.railway.app"
+      }
+    },
     {
       "type": "direct",
       "tag": "direct"
